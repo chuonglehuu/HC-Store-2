@@ -2,14 +2,24 @@ import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined
 import { Button, TextField } from "@mui/material";
 import classNames from "classnames/bind";
 import { useState } from "react";
+import { addCategory } from "../../../../firebase/service";
 import styles from "./AddCategory.module.scss";
 
 const cx = classNames.bind(styles);
-function AddCategory() {
+function AddCategory({setOpen}) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleSubmit = async (e) => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      addCategory(name, description);
+      setOpen(false);
+      alert("Create new product successfully");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className={cx("main")}>

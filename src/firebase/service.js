@@ -53,3 +53,21 @@ export const updateProduct = async (
     update_at: Timestamp.fromDate(new Date()),
   });
 };
+
+export const addCategory = async (name, description) => {
+  const docRef = collection(db, "categories");
+  await addDoc(docRef, {
+    name: name,
+    description: description,
+    create_at: Timestamp.fromDate(new Date()),
+  });
+};
+
+export const updateCategory = async (id, name, description) => {
+  const docRef = doc(db, "categories", id);
+  await updateDoc(docRef, {
+    name: name,
+    description: description,
+    update_at: Timestamp.fromDate(new Date()),
+  });
+};

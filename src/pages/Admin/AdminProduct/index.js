@@ -51,7 +51,7 @@ function AdminProduct() {
   async function deleteProduct(id) {
     try {
       await deleteDoc(doc(db, "products", id));
-      await handleCloseDel();
+      handleCloseDel();
       alert("delete success");
     } catch (error) {
       alert(error.message);
@@ -92,14 +92,13 @@ function AdminProduct() {
               handleCloseAdd();
             }}
           >
-            <AddProduct />
+            <AddProduct setOpen={setOpen} />
           </Dialog>
         </div>
         <div className={cx("table")}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell className={cx("style-col")}>Id</TableCell>
                 <TableCell className={cx("style-col")}>Name</TableCell>
                 <TableCell className={cx("style-col")}>Type</TableCell>
                 <TableCell className={cx("style-col")}>Description</TableCell>
@@ -114,7 +113,6 @@ function AdminProduct() {
             <TableBody>
               {products.map((data, index) => (
                 <TableRow key={index}>
-                  <TableCell>{index + 1}</TableCell>
                   <TableCell>{data.name}</TableCell>
                   <TableCell>{data.type}</TableCell>
                   <TableCell className={cx("style-display")}>

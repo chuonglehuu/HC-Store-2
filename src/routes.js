@@ -1,11 +1,15 @@
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useEffect } from "react";
 import { useRoutes } from "react-router-dom";
 import AdminLayout from "./components/AdminLayout/DefaultLayout";
 import DefaultLayout from "./components/Layout/DefaultLayout";
 import HomeOnly from "./components/Layout/HomeOnly";
 import { UserAuth } from "./context/AuthContext";
+import { db } from "./firebase/config";
 import About from "./pages/About";
-import AdminProduct from "./pages/Admin/AdminProduct";
 import AdminCategory from "./pages/Admin/AdminCategory";
+import UpdateCategory from "./pages/Admin/AdminCategory/UpdateCategory";
+import AdminProduct from "./pages/Admin/AdminProduct";
 import UpdateProduct from "./pages/Admin/AdminProduct/UpdateProduct";
 import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
@@ -17,7 +21,24 @@ import Social from "./pages/Social";
 import UploadUser from "./pages/UploadUser";
 
 export default function Router() {
-  const { user, role } = UserAuth();
+  const { user, role, setRole } = UserAuth();
+
+  const fetchUserRole = async () => {
+    const querySnapshot = await getDocs(
+      query(collection(db, "users"), where("email", "==", user.email))
+    );
+    if (querySnapshot.docs.length > 0) {
+      const userDoc = querySnapshot.docs[0];
+      const userRole = userDoc.data().role;
+      setRole(userRole);
+    } else {
+      console.log("User not found");
+    }
+  };
+
+  useEffect(() => {
+    fetchUserRole();
+  }, [user]);
 
   return useRoutes([
     {
@@ -115,6 +136,17 @@ export default function Router() {
         role === 1 ? (
           <AdminLayout>
             <UpdateProduct />
+          </AdminLayout>
+        ) : (
+          <NotFound />
+        ),
+    },
+    {
+      path: "/manager/update-category",
+      element:
+        role === 1 ? (
+          <AdminLayout>
+            <UpdateCategory />
           </AdminLayout>
         ) : (
           <NotFound />

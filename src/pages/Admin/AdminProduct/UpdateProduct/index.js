@@ -27,7 +27,8 @@ function UpdateProduct() {
 
   const update = async (id, name, type, desc, price, promo, new_price) => {
     try {
-      updateProduct(id, name, type, desc, price, promo, new_price);
+      await updateProduct(id, name, type, desc, price, promo, new_price);
+      navigate("/manager")
     } catch (error) {
       alert(error.message);
     }

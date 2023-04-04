@@ -6,7 +6,7 @@ import { addProduct } from "../../../../firebase/service";
 import styles from "./AddProduct.module.scss";
 
 const cx = classNames.bind(styles);
-function AddProduct() {
+function AddProduct({ setOpen }) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [des, setDes] = useState("");
@@ -18,6 +18,7 @@ function AddProduct() {
     e.preventDefault();
     try {
       addProduct(name, category, des, price, promo, currentPrice, imgUpload);
+      setOpen(false);
       alert("Create new product successfully");
     } catch (error) {
       console.log(error);
