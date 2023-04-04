@@ -11,6 +11,7 @@ import AdminCategory from "./pages/Admin/AdminCategory";
 import UpdateCategory from "./pages/Admin/AdminCategory/UpdateCategory";
 import AdminProduct from "./pages/Admin/AdminProduct";
 import UpdateProduct from "./pages/Admin/AdminProduct/UpdateProduct";
+import AdminUser from "./pages/Admin/AdminUser";
 import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -102,7 +103,7 @@ export default function Router() {
       element:
         role === 0 ? (
           <AdminLayout>
-            <h1>admin page</h1>
+            <AdminUser />
           </AdminLayout>
         ) : (
           <NotFound />
