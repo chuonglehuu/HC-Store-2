@@ -1,21 +1,24 @@
 import { useRoutes } from "react-router-dom";
 import AdminLayout from "./components/AdminLayout/DefaultLayout";
+import DefaultLayout from "./components/Layout/DefaultLayout";
 import HomeOnly from "./components/Layout/HomeOnly";
 import { UserAuth } from "./context/AuthContext";
 import About from "./pages/About";
+import AdminProduct from "./pages/Admin/AdminProduct";
+import UpdateProduct from "./pages/Admin/AdminProduct/UpdateProduct";
+import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import NotFound from "./pages/NotFound";
 import Product from "./pages/Product";
 import Register from "./pages/Register";
 import Social from "./pages/Social";
-// import AdminProduct from "./pages/Admin/AdminProduct";
-import DefaultLayout from "./components/Layout/DefaultLayout";
-import ForgotPassword from "./pages/ForgotPassword";
-import NotFound from "./pages/NotFound";
 import UploadUser from "./pages/UploadUser";
 
 export default function Router() {
   const { user, role } = UserAuth();
+
+  console.log({ user, role });
 
   return useRoutes([
     {
@@ -90,19 +93,22 @@ export default function Router() {
       element:
         role === 1 ? (
           <AdminLayout>
-            <h1>manager page</h1>
+            <AdminProduct />
           </AdminLayout>
         ) : (
           <NotFound />
         ),
     },
-    // {
-    //   path: "/admin/product",
-    //   element: (
-    //     <AdminLayout>
-    //       <h1>admin page</h1>
-    //     </AdminLayout>
-    //   ),
-    // },
+    {
+      path: "/manager/update-product",
+      element:
+        role === 1 ? (
+          <AdminLayout>
+            <UpdateProduct />
+          </AdminLayout>
+        ) : (
+          <NotFound />
+        ),
+    },
   ]);
 }

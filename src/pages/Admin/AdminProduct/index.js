@@ -58,7 +58,7 @@ function AdminProduct() {
   }
 
   function updateProduct(id, name, type, desc, price, promo, new_price) {
-    navigate("/admin/product/update-product", {
+    navigate("/manager/update-product", {
       state: {
         id: id,
         name: name,
