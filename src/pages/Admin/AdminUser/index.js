@@ -1,6 +1,5 @@
 import ControlPointOutlinedIcon from "@mui/icons-material/ControlPointOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import {
   Button,
   Dialog,
@@ -11,11 +10,10 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { grey, red } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import classNames from "classnames/bind";
 import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { db } from "../../../firebase/config";
 import AddManager from "./AddManager";
 import styles from "./AdminUser.module.scss";
@@ -26,8 +24,6 @@ function AdminUser() {
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
   const [del, setDel] = useState(false);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     onSnapshot(collection(db, "users"), (snapshot) => {
@@ -64,8 +60,6 @@ function AdminUser() {
       alert(error.message);
     }
   }
-
-  function updateUser() {}
 
   return (
     <div className={cx("main")}>
@@ -111,24 +105,6 @@ function AdminUser() {
                   <TableCell>{data.phone}</TableCell>
                   <TableCell>{data.address}</TableCell>
                   <TableCell>
-                    <Button
-                      onClick={() => {
-                        updateUser();
-                      }}
-                      variant="contained"
-                      startIcon={<ModeEditOutlineOutlinedIcon />}
-                      size="small"
-                      sx={{
-                        marginRight: 1,
-                        backgroundColor: grey[500],
-                        "&:hover": {
-                          backgroundColor: grey[700],
-                        },
-                      }}
-                    >
-                      Edit
-                    </Button>
-
                     <Button
                       onClick={handleOpenDel}
                       variant="contained"

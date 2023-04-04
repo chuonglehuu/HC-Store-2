@@ -23,7 +23,6 @@ import UploadUser from "./pages/UploadUser";
 
 export default function Router() {
   const { user, role, setRole } = UserAuth();
-
   const fetchUserRole = async () => {
     const querySnapshot = await getDocs(
       query(collection(db, "users"), where("email", "==", user.email))
@@ -38,7 +37,9 @@ export default function Router() {
   };
 
   useEffect(() => {
-    fetchUserRole();
+    if (user) {
+      fetchUserRole();
+    }
   }, [user]);
 
   return useRoutes([

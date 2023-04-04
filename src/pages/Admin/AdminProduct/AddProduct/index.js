@@ -1,12 +1,22 @@
 import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined";
-import { Button, TextField } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import classNames from "classnames/bind";
+import { collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { db } from "../../../../firebase/config";
 import { addProduct } from "../../../../firebase/service";
 import styles from "./AddProduct.module.scss";
 
 const cx = classNames.bind(styles);
 function AddProduct({ setOpen }) {
+  const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [des, setDes] = useState("");
@@ -14,6 +24,7 @@ function AddProduct({ setOpen }) {
   const [promo, setPromo] = useState("");
   const [currentPrice, setCurrentPrice] = useState("");
   const [imgUpload, setImgUpload] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -24,10 +35,20 @@ function AddProduct({ setOpen }) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     const total = price - (price * promo) / 100;
     setCurrentPrice(total);
   }, [promo, price]);
+
+  useEffect(() => {
+    onSnapshot(collection(db, "categories"), (snapshot) => {
+      setCategories(
+        snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
+    });
+  }, []);
+
   return (
     <div className={cx("main")}>
       <div className={cx("content")}>
@@ -43,15 +64,26 @@ function AddProduct({ setOpen }) {
             required
             autoFocus
           />
-          <TextField
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            id="outlined-basic"
-            label="Category"
-            variant="outlined"
-            sx={{ width: "80%", marginTop: "20px" }}
-            required
-          />
+
+          <FormControl sx={{ width: "80%", marginTop: "20px" }}>
+            <InputLabel id="demo-simple-select-label">Category</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={category}
+              label="Choose a category"
+              onChange={(e) => setCategory(e.target.value)}
+              required
+              sx={{textAlign: 'start' }}
+            >
+              {categories.map((item) => (
+                <MenuItem key={item.id} value={item.name}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           <TextField
             value={des}
             onChange={(e) => setDes(e.target.value)}

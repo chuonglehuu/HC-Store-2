@@ -1,21 +1,32 @@
 import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined";
 import { Button, TextField } from "@mui/material";
 import classNames from "classnames/bind";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
-import { addCategory } from "../../../../firebase/service";
+import { UserAuth } from "../../../../context/AuthContext";
+import { auth } from "../../../../firebase/config";
+import { addManager } from "../../../../firebase/service";
 import styles from "./AddManager.module.scss";
 
 const cx = classNames.bind(styles);
-function AddCategory({setOpen}) {
+
+function AddCategory({ setOpen }) {
+  const { logOut, logIn, setRole } = UserAuth();
+  
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      addCategory(name, description);
+      const data = await createUserWithEmailAndPassword(auth, email, "123123");
+      await addManager(name, email, phone, address, data.user.uid);
+      await logOut();
+      await logIn("hcadmin@gmail.com", "123123");
+      setRole(0);
       setOpen(false);
-      alert("Create new product successfully");
     } catch (error) {
       console.log(error);
     }
@@ -24,23 +35,44 @@ function AddCategory({setOpen}) {
   return (
     <div className={cx("main")}>
       <div className={cx("content")}>
-        <h2 className={cx("title")}>Add New Category</h2>
+        <h2 className={cx("title")}>Create new manager</h2>
         <form className={cx("form-add")} onSubmit={handleSubmit}>
           <TextField
             value={name}
             onChange={(e) => setName(e.target.value)}
             id="outlined-basic"
-            label="Category Name"
+            label="Name"
             variant="outlined"
             sx={{ width: "80%", marginTop: "20px" }}
             required
             autoFocus
           />
+
           <TextField
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             id="outlined-basic"
-            label="Description"
+            label="Email"
+            variant="outlined"
+            sx={{ width: "80%", marginTop: "20px" }}
+            required
+          />
+
+          <TextField
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            id="outlined-basic"
+            label="Phone number"
+            variant="outlined"
+            sx={{ width: "80%", marginTop: "20px" }}
+            required
+          />
+
+          <TextField
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            id="outlined-basic"
+            label="Address"
             variant="outlined"
             sx={{ width: "80%", marginTop: "20px" }}
             required
@@ -52,7 +84,7 @@ function AddCategory({setOpen}) {
             startIcon={<BookmarkAddedOutlinedIcon />}
             type="submit"
           >
-            Save Category
+            Create manager
           </Button>
         </form>
       </div>

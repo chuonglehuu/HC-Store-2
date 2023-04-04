@@ -71,3 +71,16 @@ export const updateCategory = async (id, name, description) => {
     update_at: Timestamp.fromDate(new Date()),
   });
 };
+
+export const addManager = async (name, email, phone, address, uid) => {
+  const docRef = collection(db, "users");
+  await addDoc(docRef, {
+    fullname: name,
+    email: email,
+    phone: phone,
+    address: address,
+    create_at: Timestamp.fromDate(new Date()),
+    uid: uid,
+    role: 1,
+  });
+};
