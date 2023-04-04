@@ -5,6 +5,7 @@ import HomeOnly from "./components/Layout/HomeOnly";
 import { UserAuth } from "./context/AuthContext";
 import About from "./pages/About";
 import AdminProduct from "./pages/Admin/AdminProduct";
+import AdminCategory from "./pages/Admin/AdminCategory";
 import UpdateProduct from "./pages/Admin/AdminProduct/UpdateProduct";
 import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
@@ -17,8 +18,6 @@ import UploadUser from "./pages/UploadUser";
 
 export default function Router() {
   const { user, role } = UserAuth();
-
-  console.log({ user, role });
 
   return useRoutes([
     {
@@ -94,6 +93,17 @@ export default function Router() {
         role === 1 ? (
           <AdminLayout>
             <AdminProduct />
+          </AdminLayout>
+        ) : (
+          <NotFound />
+        ),
+    },
+    {
+      path: "/manager/categories",
+      element:
+        role === 1 ? (
+          <AdminLayout>
+            <AdminCategory />
           </AdminLayout>
         ) : (
           <NotFound />

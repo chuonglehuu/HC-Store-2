@@ -14,7 +14,7 @@ function UpdateProduct() {
   const data = location.state;
 
   const [name, setName] = useState("" || data.name);
-  const [catagory, setCatagory] = useState(data.type);
+  const [category, setCategory] = useState(data.type);
   const [desc, setDesc] = useState(data.desc);
   const [price, setPrice] = useState(data.price);
   const [promo, setPromo] = useState(data.promo);
@@ -49,10 +49,10 @@ function UpdateProduct() {
             autoFocus
           />
           <TextField
-            value={catagory}
-            onChange={(e) => setCatagory(e.target.value)}
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
             id="outlined-basic"
-            label="Catagory"
+            label="Category"
             variant="outlined"
             sx={{ width: "80%", marginTop: "20px" }}
             required
@@ -103,7 +103,7 @@ function UpdateProduct() {
             variant="contained"
             startIcon={<BookmarkAddedOutlinedIcon />}
             onClick={() => {
-              update(data.id, name, catagory, desc, price, promo, currentPrice);
+              update(data.id, name, category, desc, price, promo, currentPrice);
             }}
           >
             Save Product

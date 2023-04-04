@@ -1,24 +1,24 @@
-import classNames from "classnames/bind";
-import { useEffect, useState } from "react";
-import { Button, Dialog, DialogActions } from "@mui/material";
 import ControlPointOutlinedIcon from "@mui/icons-material/ControlPointOutlined";
-import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { collection, onSnapshot, deleteDoc, doc } from "firebase/firestore";
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import {
+  Button,
+  Dialog,
+  DialogActions,
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableRow,
-  TableCell,
 } from "@mui/material";
-import { red, grey } from "@mui/material/colors";
-import { Link, useNavigate } from "react-router-dom";
-
-import styles from "./AdminProduct.module.scss";
+import { grey, red } from "@mui/material/colors";
+import classNames from "classnames/bind";
+import { collection, deleteDoc, doc, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { db } from "../../../firebase/config";
-import UpdateProduct from "./UpdateProduct";
 import AddProduct from "./AddProduct";
+import styles from "./AdminProduct.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -26,8 +26,9 @@ function AdminProduct() {
   const [products, setProducts] = useState([]);
   const [open, setOpen] = useState(false);
   const [del, setDel] = useState(false);
-  const [update, setUpdate] = useState(false);
+
   const navigate = useNavigate();
+
   useEffect(() => {
     onSnapshot(collection(db, "products"), (snapshot) => {
       setProducts(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
