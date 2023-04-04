@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect } from "react";
-import { useRoutes } from "react-router-dom";
+import { useLocation, useNavigate, useRoutes } from "react-router-dom";
 import AdminLayout from "./components/AdminLayout/DefaultLayout";
 import DefaultLayout from "./components/Layout/DefaultLayout";
 import HomeOnly from "./components/Layout/HomeOnly";
@@ -21,8 +21,19 @@ import Register from "./pages/Register";
 import Social from "./pages/Social";
 import UploadUser from "./pages/UploadUser";
 
+const DEFAULT_PATHS = ["/", "/about", "/product", "/social"];
+const MANAGER_PATHS = [
+  "/manager",
+  "/manager/categories",
+  "/manager/update-product",
+  "/manager/update-category",
+];
+
 export default function Router() {
   const { user, role, setRole } = UserAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const fetchUserRole = async () => {
     const querySnapshot = await getDocs(
       query(collection(db, "users"), where("email", "==", user.email))
@@ -41,6 +52,24 @@ export default function Router() {
       fetchUserRole();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (
+      role === 1 &&
+      !MANAGER_PATHS.includes(location.pathname) &&
+      !DEFAULT_PATHS.includes(location.pathname)
+    ) {
+      navigate("/manager");
+    }
+
+    if (
+      role === 0 &&
+      !DEFAULT_PATHS.includes(location.pathname) &&
+      location.pathname !== "/admin"
+    ) {
+      navigate("/admin");
+    }
+  }, [role]);
 
   return useRoutes([
     {
