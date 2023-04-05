@@ -22,6 +22,7 @@ import Social from "./pages/Social";
 import UploadUser from "./pages/UploadUser";
 
 const DEFAULT_PATHS = ["/", "/about", "/product", "/social"];
+const PATHS = ["/", "/about", "/product", "/social", "/login", "/register"];
 const MANAGER_PATHS = [
   "/manager",
   "/manager/categories",
@@ -69,7 +70,15 @@ export default function Router() {
     ) {
       navigate("/admin");
     }
-  }, [role]);
+
+    if (role === 2 && !DEFAULT_PATHS.includes(location.pathname)) {
+      navigate("/");
+    }
+
+    if (!user && !PATHS.includes(location.pathname)) {
+      navigate("/");
+    }
+  }, [role, user]);
 
   return useRoutes([
     {
