@@ -1,13 +1,5 @@
-import {
-  Dialog,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-} from "@mui/material";
-import Button from "@mui/material/Button";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
@@ -16,9 +8,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { getDownloadURL, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserAuth } from "../../context/AuthContext";
 import { db, storage } from "../../firebase/config";
-import ConfirmAddress from "./ConfirmAddress";
 import styles from "./Product.module.scss";
 
 const cx = classNames.bind(styles);
@@ -27,15 +17,9 @@ const ITEMS_PER_PAGE = 6;
 
 function Product() {
   const navigate = useNavigate();
-  const { role, user } = UserAuth();
 
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [openConfirmAddress, setOpenConfirmAddress] = useState(false);
-  const [emailUser, setEmailUser] = useState("");
-  const [userNameBuy, setUserNameBuy] = useState("");
-  const [productNameBuy, setProductNameBuy] = useState("");
-  const [productPriceBuy, setProductPriceBuy] = useState();
   const [filter, setFilter] = useState("all");
   const [categories, setCategories] = useState([]);
 
@@ -77,23 +61,6 @@ function Product() {
     });
   }, [filter]);
 
-  const handleOpenConfirmAddress = (
-    emailUser,
-    userName,
-    productName,
-    productPrice
-  ) => {
-    setOpenConfirmAddress(true);
-    setEmailUser(emailUser);
-    setUserNameBuy(userName);
-    setProductNameBuy(productName);
-    setProductPriceBuy(productPrice);
-  };
-
-  function handleCloseAdd() {
-    setOpenConfirmAddress(false);
-  }
-
   return (
     <>
       <FormControl sx={{ width: "200px", marginTop: "12px" }}>
@@ -131,7 +98,11 @@ function Product() {
                 marginBottom: "24px",
               }}
               style={{ border: "1px solid #999" }}
-              onClick={() => navigate("/product/detail")}
+              onClick={() =>
+                navigate("/product/detail", {
+                  state: item,
+                })
+              }
             >
               <CardMedia
                 sx={{ height: 140 }}
@@ -153,33 +124,6 @@ function Product() {
                   {item.description}
                 </Typography>
               </CardContent>
-              {role === 2 && (
-                <>
-                  <CardActions>
-                    <Button
-                      size="small"
-                      onClick={() => {
-                        if (user && user.providerData.length) {
-                          handleOpenConfirmAddress(
-                            user.providerData[0].email,
-                            user.providerData[0].displayName || "",
-                            item.name,
-                            item.new_price
-                          );
-                        }
-                      }}
-                      sx={{
-                        ":hover": {
-                          cursor: "pointer",
-                          backgroundColor: " #b3ffe0",
-                        },
-                      }}
-                    >
-                      Buy
-                    </Button>
-                  </CardActions>
-                </>
-              )}
             </Card>
           ))}
         <div className={cx("pagination")}>
@@ -197,20 +141,6 @@ function Product() {
             </button>
           ))}
         </div>
-        <Dialog
-          open={openConfirmAddress}
-          onClose={() => {
-            handleCloseAdd();
-          }}
-        >
-          <ConfirmAddress
-            setOpen={setOpenConfirmAddress}
-            emailUser={emailUser}
-            userName={userNameBuy}
-            productName={productNameBuy}
-            productPrice={productPriceBuy}
-          />
-        </Dialog>
       </div>
     </>
   );
