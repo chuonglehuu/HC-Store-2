@@ -39,7 +39,6 @@ const DEFAULT_PATHS = [
   "/",
   "/about",
   "/product",
-  "/orders",
   "/product/detail",
   "/upload-user",
   "/forgot-password",
